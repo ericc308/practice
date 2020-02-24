@@ -17,10 +17,34 @@ struct UserType {
   std::string name;
 };
 
+inline auto ini_db(std::string filepath) {
+  auto storage =
+      make_storage(filepath, make_table("users", make_column("id", &User::id, autoincrement(), primary_key()), make_column("first_name", &User::firstName), make_column("type_id", &User::typeId)));
+  storage.sync_schema();
+  return storage;
+}
+
+using Storage = decltype(ini_db(""));
+
+auto add_data_to_database(User u1, Storage storage) {
+  auto insertedId = storage.insert(u1);
+  return insertedId;
+}
+
+void add_datagroup_to_database(std::vector<User> user_list, Storage storage) {
+  for (int iuser = 0; iuser < user_list.size(); iuser++) {
+    add_data_to_database(user_list[iuser], storage);
+  }
+}
+
+void update_to_database(User u1, Storage storage) { storage.update(u1); }
+
 int main() {
 
-  std::string path = "db.sqlite";
+  std::string path = "sqlite.db";
   std::cout << "Create File:\n";
+
+  // sqlite_orm::internal::storage_t<User> storage;
 
   FILE *pFile;
   pFile = fopen(path.c_str(), "rb");
@@ -39,52 +63,75 @@ int main() {
     pFile = fopen(path.c_str(), "rb");
     if (pFile != nullptr) {
       std::cout << "File cannot be removed!\n";
+      exit(0);
     }
+  } else {
   }
 
-  auto storage =
-      make_storage("db.sqlite", make_table("users", make_column("id", &User::id, autoincrement(), primary_key()), make_column("first_name", &User::firstName), make_column("type_id", &User::typeId)));
-
-  storage.sync_schema();
+  Storage storage = ini_db(path);
 
   User user1;
   user1.id = 1;
   user1.firstName = "John";
   user1.typeId = 2;
-  auto insertedId = storage.insert(user1);
+  add_data_to_database(user1, storage);
   User user2;
   user2.id = 1;
   user2.firstName = "Mary";
   user2.typeId = 2;
-  auto insertedId2 = storage.insert(user2);
+  update_to_database(user2, storage);
   User user3{1, "Ken", 3};
-  auto insertedId3 = storage.insert(user3);
-  //  SELECT doctor_id
-  //  FROM visits
-  //  WHERE LENGTH(patient_name) > 8
+  add_data_to_database(user3, storage);
+  User user4{1, "Penaa", 3};
+  User user5{1, "Yen", 5};
+  User user6{1, "Fenff", 2};
+  User user7{1, "Gen", 1};
+  std::vector<User> user_list;
+  user_list.push_back(user4);
+  user_list.push_back(user5);
+  user_list.push_back(user6);
+  user_list.push_back(user7);
+  add_datagroup_to_database(user_list, storage);
+
+  // print all
   std::vector<User> allUsers = storage.get_all<User>();
   std::cout << "allUsers (" << allUsers.size() << "):" << std::endl;
-  //   for (auto &user : allUsers) {
-  //     std::cout
-  //         << storage.dump(user)
-  //         << std::
-  //                endl; //  dump returns std::string with json-like style
-  //                      //  object info. For example: { id : '1', first_name
-  //                      //  : 'Jonh', last_name : 'Doe', birth_date :
-  //                      //  '664416000', image_url :
-  //                      //  'https://cdn1.iconfinder.com/data/icons/man-icon-set/100/man_icon-21-512.png',
-  //                      //  type_id : '3' }
-  //   }
   for (int item = 0; item < allUsers.size(); item++) {
     std::cout << allUsers[item].id << " " << allUsers[item].firstName << " " << allUsers[item].typeId << "\n";
   }
-  try {
-    auto user = storage.get<User>(insertedId);
-    std::cout << "user = " << user.firstName << " " << user.typeId << std::endl;
-  } catch (std::system_error e) {
-    std::cout << e.what() << std::endl;
-  } catch (...) {
-    std::cout << "unknown exeption" << std::endl;
+
+  // select 1 and show all
+  std::vector<User> SelectUsers = storage.get_all<User>(where(c(&User::typeId) > 2));
+  std::cout << "User typeId > 2 (" << SelectUsers.size() << "):" << std::endl;
+  for (auto &iUser : SelectUsers) {
+    std::cout << storage.dump(iUser) << std::endl;
   }
+
+  //select by execute sql command
+  auto selectStatement = storage.prepare(select(&User::firstName, where(length(&User::firstName) > 3)));
+  std::cout << "selectStatement = " << selectStatement.sql() << std::endl;  //  prints "SELECT doctor_id FROM ..."
+  auto userrows = storage.execute(selectStatement); //  rows is std::vector<decltype(Visit::doctor_id)>
+
+     for (int iUser=0;iUser<userrows.size();iUser++) {
+    std::cout << userrows[iUser] << std::endl;
+     }
+
+//select order by desc
+  std::cout << "where length( firstname > 3 ) order by id desc" << std::endl; 
+    auto select_desc = storage.get_all<User>(where(length(&User::firstName) > 3),order_by(&User::id).desc());
+    for (auto &iUser : select_desc) {
+      std::cout << storage.dump(iUser) << std::endl;
+    }
+
+    //select order by asc
+    std::cout << "where length( firstname > 3 ) order by id asc" << std::endl; 
+    auto select_asc = storage.get_all<User>(where(length(&User::firstName) > 3),order_by(&User::id).asc());
+    for (auto &iUser : select_asc) {
+      std::cout << storage.dump(iUser) << std::endl;
+    }
+
+
+
+
   return 0;
 }
