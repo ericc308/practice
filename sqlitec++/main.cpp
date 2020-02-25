@@ -82,7 +82,7 @@ int main() {
   update_to_database(user2, storage);
   User user3{1, "Ken", 3};
   add_data_to_database(user3, storage);
-  std::vector<User> user_list = {{1, "Penaa", 3}, {1, "Yen", 5}, {1, "Fenff", 2}, {1, "Gen", 1}, {1, "Zenni", 1}, {1, "Xoen", 1}, {1, "Benna", 1}};
+  std::vector<User> user_list = {{1, "Penaa", 3}, {1, "Yen", 5}, {1, "Fenff", 2}, {1, "Gen", 2}, {1, "Zenni", 2}, {1, "Xoen", 2}, {1, "Benna", 2}};
 
   add_datagroup_to_database(user_list, storage);
 
@@ -135,15 +135,20 @@ int main() {
     std::cout << storage.dump(iUser) << std::endl;
   }
 
-  // select by execute sql command
-  std::cout << "Use prepare statement. \n";
-  auto selectStatement = storage.prepare(select(&User::firstName, where(length(&User::firstName) > 3)));
-  std::cout << "Command = " << selectStatement.sql() << std::endl; //  prints "SELECT doctor_id FROM ..."
-  auto userrows = storage.execute(selectStatement);                //  rows is std::vector<decltype(Visit::doctor_id)>
 
-  for (int iUser = 0; iUser < userrows.size(); iUser++) {
-    std::cout << userrows[iUser] << std::endl;
+
+  // select by execute sql command
+  std::cout << "Use select firstname @  condition(length(name)>3). \n";
+  auto selectStatement = storage.select(&User::firstName, where(length(&User::firstName) > 3));
+ for (auto &iUser : selectStatement) {
+    std::cout << iUser<< std::endl;
   }
 
+    //select distinct
+  std::cout<<"Get distinct typeid data @ (length(name)>3)";
+  auto selectStatement_dist = storage.select(columns(&User::firstName,&User::typeId), where(length(&User::firstName) > 3));
+    for(int iUser=0;iUser<selectStatement_dist.size();iUser++){
+      std::cout<<std::get<0>(selectStatement_dist[iUser])<<" "<<std::get<1>(selectStatement_dist[iUser])<<std::endl;
+    }
   return 0;
 }
