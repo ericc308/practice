@@ -75,11 +75,9 @@ int main() {
   user1.firstName = "John";
   user1.typeId = 2;
   add_data_to_database(user1, storage);
-  User user2;
-  user2.id = 1;
-  user2.firstName = "Mary";
-  user2.typeId = 2;
-  update_to_database(user2, storage);
+  std::vector<User> first_update = storage.get_all<User>();
+  first_update[0].firstName = "Mary";
+  update_to_database(first_update[0], storage);
   User user3{1, "Ken", 3};
   add_data_to_database(user3, storage);
   std::vector<User> user_list = {{1, "Penaa", 3}, {1, "Yen", 5}, {1, "Fenff", 2}, {1, "Gen", 2}, {1, "Zenni", 2}, {1, "Xoen", 2}, {1, "Benna", 2}};

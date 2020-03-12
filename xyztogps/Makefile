@@ -4,14 +4,14 @@ SRCS = $(shell ls *.cpp)
 
 
 OBJS = $(SRCS:.cpp=.o)
-APP = ./sqlite_tb
+APP = ./gps.exe
 
-LDFLAGS += -lfftw3 -lsqlite3 -lpthread
+# LDFLAGS += -lfftw3 -lsqlite3 -lpthread
 
 all: $(APP) 
 
 $(APP): $(OBJS)
-	$(CXX)   -o $(APP) $(OBJS) $(LDFLAGS)
+	$(CXX)  -o $(APP) $(OBJS) $(LDFLAGS)
 
 $(OBJS):
 	$(CXX) -c  $(SRCS) $(LDFLAGS)
@@ -20,7 +20,7 @@ $(OBJS):
 
 clean:
 	# $(MAKE) -C test clean
-	rm -rf $(OBJS) $(APP) *.db
+	rm -rf $(OBJS) $(APP) 
 
 format:
 	clang-format -assume-filename=.clang-format -i $(SRCS)
