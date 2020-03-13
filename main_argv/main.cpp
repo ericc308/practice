@@ -28,5 +28,7 @@ int main(int argc, char *argv[]) {
   sub2.assign(buffer,num+1,end_string-num-1);
   std::cout << stoi(sub1)<< std::endl;
   std::cout << stoi(sub2)<< std::endl;
+  
+  std::cout<<(argv[2]==NULL)<<std::endl;
   return 0;
 }
