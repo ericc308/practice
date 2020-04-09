@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ycj/桌面/c++_tb/practice/cmake_tb/./hpp/header.h
+cstdio
+-
+cstdlib
+-
+vector
+-
+cstring
+-
+iostream
+-
+
+/home/ycj/桌面/c++_tb/practice/cmake_tb/cpp/header.cpp
+../hpp/header.h
+/home/ycj/桌面/c++_tb/practice/cmake_tb/hpp/header.h
+
+/home/ycj/桌面/c++_tb/practice/cmake_tb/hpp/header.h
+cstdio
+-
+cstdlib
+-
+vector
+-
+cstring
+-
+iostream
+-
+
+/home/ycj/桌面/c++_tb/practice/cmake_tb/main.cpp
+./hpp/header.h
+/home/ycj/桌面/c++_tb/practice/cmake_tb/./hpp/header.h
+

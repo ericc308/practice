@@ -1,0 +1,6 @@
+{
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+    "editor.fontWeight": "bold",
+    "terminal.integrated.drawBoldTextInBrightColors": false,
+    "terminal.integrated.cursorBlinking": true
+}

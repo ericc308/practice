@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/ycj/桌面/c++_tb/practice/cmake_tb/build",
+  "command": "/usr/bin/c++    -g   -o CMakeFiles/main.dir/main.cpp.o -c /home/ycj/桌面/c++_tb/practice/cmake_tb/main.cpp",
+  "file": "/home/ycj/桌面/c++_tb/practice/cmake_tb/main.cpp"
+},
+{
+  "directory": "/home/ycj/桌面/c++_tb/practice/cmake_tb/build",
+  "command": "/usr/bin/c++    -g   -o CMakeFiles/main.dir/cpp/header.cpp.o -c /home/ycj/桌面/c++_tb/practice/cmake_tb/cpp/header.cpp",
+  "file": "/home/ycj/桌面/c++_tb/practice/cmake_tb/cpp/header.cpp"
+}
+]

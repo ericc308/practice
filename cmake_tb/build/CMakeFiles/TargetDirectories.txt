@@ -1,0 +1,3 @@
+/home/ycj/桌面/c++_tb/practice/cmake_tb/build/CMakeFiles/rebuild_cache.dir
+/home/ycj/桌面/c++_tb/practice/cmake_tb/build/CMakeFiles/main.dir
+/home/ycj/桌面/c++_tb/practice/cmake_tb/build/CMakeFiles/edit_cache.dir
