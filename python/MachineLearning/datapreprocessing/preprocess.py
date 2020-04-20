@@ -15,7 +15,7 @@ imputer.fit(x[:, 1:3])
 x[:, 1:3] = imputer.transform(x[:, 1:3])
 # print(x)
 
-## avoid dependent, if 0 1 2 3
+
 ## encoding catogory
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
